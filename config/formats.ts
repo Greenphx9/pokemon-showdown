@@ -2749,6 +2749,19 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard AG', 'NatDex Mod'],
 	},
 
+	// National Dex Rand Bats
+	///////////////////////////////////////////////////////////////////
+
+	{
+		section: "National Dex Random Battles",
+	},
+	{
+		name: "[Gen 9] National Dex Random Battle",
+		mod: 'gen9',
+		team: 'random',
+		ruleset: ["[Gen 9] Random Battle", "NatDex Mod"],
+	},
+
 	// Randomized Format Spotlight
 	///////////////////////////////////////////////////////////////////
 

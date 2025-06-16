@@ -1173,9 +1173,11 @@ export class RandomTeams {
 			}
 			return this.sample(species.requiredItems);
 		}
+		if (species.name === 'Farfetch\u2019d') return 'Leek';
 		if (role === 'AV Pivot') return 'Assault Vest';
 		if (species.id === 'pikachu') return 'Light Ball';
 		if (species.id === 'regieleki') return 'Magnet';
+		if (species.baseSpecies === 'Marowak') return 'Thick Club';
 		if (types.includes('Normal') && moves.has('doubleedge') && moves.has('fakeout')) return 'Silk Scarf';
 		if (
 			species.id === 'froslass' || moves.has('populationbomb') ||
@@ -1423,9 +1425,11 @@ export class RandomTeams {
 	getLevel(
 		species: Species,
 		isDoubles: boolean,
+		isND: boolean,
 	): number {
 		if (this.adjustLevel) return this.adjustLevel;
 		// doubles levelling
+		if (isND && this.randomSetsND[species.id]["level"]) return this.randomSetsND[species.id]["level"]!;
 		if (isDoubles && this.randomDoublesSets[species.id]["level"]) return this.randomDoublesSets[species.id]["level"]!;
 		if (!isDoubles && this.randomSets[species.id]["level"]) return this.randomSets[species.id]["level"]!;
 		// Default to tier-based levelling
@@ -1469,11 +1473,12 @@ export class RandomTeams {
 		s: string | Species,
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
 		isLead = false,
-		isDoubles = false
+		isDoubles = false,
+		isND = false
 	): RandomTeamsTypes.RandomSet {
 		const species = this.dex.species.get(s);
 		const forme = this.getForme(species);
-		const sets = this[`random${isDoubles ? 'Doubles' : ''}Sets`][species.id]["sets"];
+		const sets = isND ? this.randomSetsND[species.id]["sets"] : this[`random${isDoubles ? 'Doubles' : ''}Sets`][species.id]["sets"];
 		const possibleSets: RandomTeamsTypes.RandomSetData[] = [];
 
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
@@ -1528,7 +1533,7 @@ export class RandomTeams {
 		}
 
 		// Get level
-		const level = this.getLevel(species, isDoubles);
+		const level = this.getLevel(species, isDoubles, isND);
 
 		// Prepare optimal HP
 		const srImmunity = ability === 'Magic Guard' || item === 'Heavy-Duty Boots';
@@ -1641,6 +1646,7 @@ export class RandomTeams {
 
 	randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./sets.json');
 	randomDoublesSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./doubles-sets.json');
+	randomSetsND: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./sets-nd.json');
 
 	randomTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
@@ -1652,6 +1658,7 @@ export class RandomTeams {
 		// For Monotype
 		const isMonotype = !!this.forceMonotype || ruleTable.has('sametypeclause');
 		const isDoubles = this.format.gameType !== 'singles';
+		const isND = this.format.ruleset.includes("NatDex Mod");
 		const typePool = this.dex.types.names().filter(name => name !== "Stellar");
 		const type = this.forceMonotype || this.sample(typePool);
 
@@ -1668,7 +1675,7 @@ export class RandomTeams {
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 		let numMaxLevelPokemon = 0;
 
-		const pokemonList = isDoubles ? Object.keys(this.randomDoublesSets) : Object.keys(this.randomSets);
+		const pokemonList = isND ? Object.keys(this.randomSetsND) : isDoubles ? Object.keys(this.randomDoublesSets) : Object.keys(this.randomSets);
 		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
 
 		let leadsRemaining = this.format.gameType === 'doubles' ? 2 : 1;
@@ -1743,7 +1750,7 @@ export class RandomTeams {
 				}
 
 				// Limit one level 100 Pokemon
-				if (!this.adjustLevel && (this.getLevel(species, isDoubles) === 100) && numMaxLevelPokemon >= limitFactor) {
+				if (!this.adjustLevel && (this.getLevel(species, isDoubles, isND) === 100) && numMaxLevelPokemon >= limitFactor) {
 					continue;
 				}
 			}
@@ -1762,15 +1769,15 @@ export class RandomTeams {
 					!isDoubles && NO_LEAD_POKEMON.includes(species.baseSpecies)
 				) {
 					if (pokemon.length + leadsRemaining === this.maxTeamSize) continue;
-					set = this.randomSet(species, teamDetails, false, isDoubles);
+					set = this.randomSet(species, teamDetails, false, isDoubles, isND);
 					pokemon.push(set);
 				} else {
-					set = this.randomSet(species, teamDetails, true, isDoubles);
+					set = this.randomSet(species, teamDetails, true, isDoubles, isND);
 					pokemon.unshift(set);
 					leadsRemaining--;
 				}
 			} else {
-				set = this.randomSet(species, teamDetails, false, isDoubles);
+				set = this.randomSet(species, teamDetails, false, isDoubles, isND);
 				pokemon.push(set);
 			}
 
@@ -1977,7 +1984,7 @@ export class RandomTeams {
 			}
 
 			// Random happiness
-			const happiness = this.random(256);
+			const happiness = 255;
 
 			// Random shininess
 			const shiny = this.randomChance(1, 1024);
@@ -2352,7 +2359,7 @@ export class RandomTeams {
 			}
 
 			// Random happiness
-			const happiness = this.random(256);
+			const happiness = 255;
 
 			// Random shininess
 			const shiny = this.randomChance(1, 1024);
