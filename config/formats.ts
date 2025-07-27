@@ -2756,10 +2756,45 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		section: "National Dex Random Battles",
 	},
 	{
-		name: "[Gen 9] National Dex Random Battle",
+		name: "[Gen 9] NatDex Random Battle",
 		mod: 'gen9',
 		team: 'random',
 		ruleset: ["[Gen 9] Random Battle", "NatDex Mod"],
+	},
+	{
+		name: "[Gen 9] NatDex Random Battle (Shared Power, B12P6)",
+		desc: `[Gen 9] NatDex Random Battle with Team Preview, Bring 12 Pick 6, and Shared Power.`,
+		mod: 'sharedpower',
+		team: 'random',
+		ruleset: ['[Gen 9] Random Battle', 'Team Preview', 'Max Team Size = 12', 'Picked Team Size = 6', 'NatDex Mod'],
+		onValidateRule() {
+			if (this.format.gameType !== 'singles') {
+				throw new Error(`Shared Power currently does not support ${this.format.gameType} battles.`);
+			}
+		},
+		onBeforeSwitchIn(pokemon) {
+			let format = this.format;
+			if (!format.getSharedPower) format = this.dex.formats.get('gen9sharedpower');
+			for (const ability of format.getSharedPower!(pokemon)) {
+				const effect = 'ability:' + this.toID(ability);
+				pokemon.volatiles[effect] = this.initEffectState({ id: effect, target: pokemon });
+				if (!pokemon.m.abils) pokemon.m.abils = [];
+				if (!pokemon.m.abils.includes(effect)) pokemon.m.abils.push(effect);
+			}
+		},
+	},
+
+	// New RandBat Formats
+	///////////////////////////////////////////////////////////////////
+	{
+		section: "New RandBats",
+	},
+	{
+		name: "[Gen 9] Almost Any Ability RandBats",
+		desc: `Pok&eacute;mon have access to almost any ability.`,
+		mod: 'gen9',
+		team: 'random',
+		ruleset: ['[Gen 9] Random Battle', '!Obtainable Abilities', 'Ability Clause = 1'],
 	},
 
 	// Randomized Format Spotlight
