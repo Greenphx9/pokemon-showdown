@@ -2843,6 +2843,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] NatDex Random Battle",
 		mod: 'gen9',
 		team: 'random',
+		bestOfDefault: true,
 		ruleset: ["[Gen 9] Random Battle", "NatDex Mod"],
 	},
 	{
@@ -2850,6 +2851,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		desc: `[Gen 9] NatDex Random Battle with Team Preview, Bring 12 Pick 6, and Shared Power.`,
 		mod: 'sharedpower',
 		team: 'random',
+		bestOfDefault: true,
 		ruleset: ['[Gen 9] Random Battle', 'Team Preview', 'Max Team Size = 12', 'Picked Team Size = 6', 'NatDex Mod'],
 		onValidateRule() {
 			if (this.format.gameType !== 'singles') {
@@ -2878,6 +2880,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		desc: `Pok&eacute;mon have access to almost any ability.`,
 		mod: 'gen9',
 		team: 'random',
+		bestOfDefault: true,
 		ruleset: ['[Gen 9] Random Battle', '!Obtainable Abilities', 'Ability Clause = 1'],
 	},
 
