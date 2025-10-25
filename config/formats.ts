@@ -3023,6 +3023,17 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 
+	{
+		section: "Iridescent Red",
+	},
+
+	{
+		name: "[Gen 9] Iridescent Red OU",
+		mod: 'gen9iridescentred',
+		ruleset: ['Standard NatDex', 'Sleep Moves Clause', '!Sleep Clause Mod', 'Min Source Gen = 3'],
+		banlist: ['Uber', 'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'King\'s Rock', 'Quick Claw', 'Baton Pass'],
+	},
+
 	// Randomized Metas
 	///////////////////////////////////////////////////////////////////
 

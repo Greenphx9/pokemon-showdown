@@ -2385,6 +2385,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Venusaurite",
 		shortDesc: "If held by a Venusaur, this item allows it to Mega Evolve in battle.",
 	},
+	venusauritey: {
+		name: "Venusaurite Y",
+		shortDesc: "If held by a Venusaur, this item allows it to Mega Evolve in battle.",
+	},
 	victreebelite: {
 		name: "Victreebelite",
 		shortDesc: "If held by a Victreebel, this item allows it to Mega Evolve in battle.",

@@ -5250,6 +5250,23 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 1.5,
 		num: 72,
 	},
+	volcanicbloom: {
+		onDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, source, target) && !source.hasType('Grass')) {
+				const r = this.random(100);
+				if (r < 50 && !source.volatiles['leechseed']) {
+					this.add('-activate', target, 'ability: Volcanic Bloom');
+					source.addVolatile('leechseed', target);
+				}
+			}
+			
+		},
+		flags: {},
+		name: "Volcanic Bloom",
+		desc: "Has a 50% chance to set leech seed on the opponent if hit by a contact move.",
+		shortDesc: "Has 50% chance to leech seed the opponent if hit by a contact move.",
+		gen: 9,
+	},
 	voltabsorb: {
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Electric') {

@@ -561,12 +561,12 @@ export class TeamValidator {
 		let species = dex.species.get(set.species);
 		set.species = species.name;
 		// Backwards compatibility with old Gmax format
-		if (set.species.toLowerCase().endsWith('-gmax') && this.format.id !== 'gen8megamax') {
-			set.species = set.species.slice(0, -5);
-			species = dex.species.get(set.species);
-			if (set.name?.endsWith('-Gmax')) set.name = species.baseSpecies;
-			set.gigantamax = true;
-		}
+		//if (set.species.toLowerCase().endsWith('-gmax') && this.format.id !== 'gen8megamax') {
+		//	set.species = set.species.slice(0, -5);
+		//	species = dex.species.get(set.species);
+		//	if (set.name?.endsWith('-Gmax')) set.name = species.baseSpecies;
+		//	set.gigantamax = true;
+		//}
 		if (set.name && set.name.length > 18) {
 			if (set.name === set.species) {
 				set.name = species.baseSpecies;
