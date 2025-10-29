@@ -618,9 +618,10 @@ export class User extends Chat.MessageContext {
 	 */
 	hasConsoleAccess(connection: Connection) {
 		if (this.hasSysopAccess()) return true;
-		if (!this.can('console')) return false; // normal permission check
+		//if (!this.can('console')) return false; // normal permission check
 
 		const whitelist = Config.consoleips || ['127.0.0.1'];
+
 		// on the IP whitelist OR the userid whitelist
 		return whitelist.includes(connection.ip) || whitelist.includes(this.id);
 	}
